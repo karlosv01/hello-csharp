@@ -1,20 +1,27 @@
 pipeline {
     agent any
     stages {
-        stage('Descarga') {
+        stage('Limpieza') {
+            steps {
+                echo 'Limpiando el espacio de trabajo...'
+                deleteDir()
+            }
+        }
+        stage('Descarga de Código') {
             steps {
                 checkout scm
             }
         }
-        stage('Compilar') {
+        stage('Ejecutar Python') {
             steps {
-                // Esto verifica si tienes dotnet instalado en el servidor
-                sh 'dotnet build'
+                // En Linux, Python 3 se suele llamar con 'python3'
+                sh 'python3 hello.py'
             }
         }
-        stage('Prueba Básica') {
+        stage('Prueba de Versión') {
             steps {
-                echo 'El código se ha compilado correctamente. ¡Prueba superada!'
+                sh 'python3 --version'
+                echo '¡Pipeline de Python completado con éxito!'
             }
         }
     }
